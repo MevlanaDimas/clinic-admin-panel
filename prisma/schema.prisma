@@ -1,0 +1,184 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/app/generated/prisma"
+}
+
+generator erd {
+  provider = "prisma-erd-generator"
+  output   = "../ERD.svg"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Promo {
+  id                Int               @id @default(autoincrement())
+  code              String            @unique @db.VarChar(10)
+  headline          String            @db.VarChar(30)
+  description       String            @db.VarChar(130)
+  CTA               String            @db.VarChar(40)
+  image             PromoImages[]     @relation("promoImages")
+  category          String?
+  validUntil        DateTime
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+}
+
+model PromoImages {
+  id                Int               @id @default(autoincrement())
+  promoId           Int               @unique
+  promo             Promo             @relation("promoImages", fields: [promoId], references: [id], onDelete: Cascade)
+  imageUrl          String
+  imageName         String
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+
+  @@index([promoId])
+}
+
+model News {
+  id                String            @id @default(uuid())
+  title             String            @db.VarChar(255)
+  slug              String            @unique
+  content           String            @db.Text
+  summary           String?           @db.VarChar(500)
+
+  category          Category          @relation(fields: [categoryId], references: [id])
+  categoryId        Int
+  tags              String[]
+  targetAudience    Audience          @default(GENERAL_PUBLIC)
+  evidenceLevel     EvidenceLevel?
+  
+  status            Status            @default(DRAFT)
+  publishedAt       DateTime?
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+
+  author            Staff             @relation("AuthoredBy", fields: [authorId], references: [id])
+  authorId          String
+  medicalReviewer   Staff?            @relation("ReviewedBy", fields: [reviewerId], references: [id])
+  reviewerId        String?
+
+  images            NewsImages[]      @relation("newsImages")
+  sourceLinks       String[]
+  viewCount         Int               @default(0)
+
+  @@index([status, publishedAt])
+}
+
+model Category {
+  id                Int               @id @default(autoincrement())
+  name              String            @unique
+  news              News[]
+}
+
+model Staff {
+  id                String            @id
+  email             String            @unique
+  username          String            @unique
+  name              String            @default("Staff")
+  title             StaffTitle        @default(Staff)
+  schedule          DoctorPracticeSchedule[] @relation("doctorSchedule")
+  bio               String?
+  authoredNews      News[]            @relation("AuthoredBy")
+  reviewedNews      News[]            @relation("ReviewedBy")
+  roleRequests      RoleRequest[]
+}
+
+model NewsImages {
+  id                Int               @id @default(autoincrement())
+  newsId            String
+  news              News              @relation("newsImages", fields: [newsId], references: [id], onDelete: Cascade)
+  imageUrl          String
+  imageName         String
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+
+  @@index([newsId])
+}
+
+enum Status {
+  DRAFT
+  PENDING_REVIEW
+  PUBLISHED
+  ARCHIVED
+}
+
+enum Audience {
+  PATIENT
+  GENERAL_PUBLIC
+  MEDICAL_PROFESSIONAL
+  INTERNAL_STAFF
+}
+
+enum EvidenceLevel {
+  META_ANALYSIS
+  RANDOMIZED_CONTROL
+  OBSERVATIONAL
+  EXPERT_OPINION
+}
+
+enum StaffTitle {
+  Staff
+  Doctor
+  Admin
+}
+
+model DoctorPracticeSchedule {
+  id                Int               @id @default(autoincrement())
+  doctorId          String            // Link to Staff.id (Doctor User ID)
+  doctor            Staff             @relation("doctorSchedule", fields: [doctorId], references: [id], onDelete: Cascade)
+  day               String
+  startTime         String
+  endTime           String
+  isAvailable       Boolean           @default(true)
+
+  @@index([doctorId])
+}
+
+model QueueTicket {
+  id                String            @id @default(cuid())
+  tokenNumber       Int               @default(autoincrement())
+  status            QueueStatus       @default(WAITING)
+  counterNumber     CounterNumber?
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+
+  @@index([status])
+}
+
+enum QueueStatus {
+  WAITING
+  CALLING
+  DONE
+}
+
+enum CounterNumber {
+  ONE
+  TWO
+}
+
+model RoleRequest {
+  id            String        @id @default(cuid())
+  staffId       String        // Link to Staff.id (Clerk User ID)
+  staff         Staff         @relation(fields: [staffId], references: [id])
+  requestedRole StaffTitle    @default(Staff)
+  status        RequestStatus @default(PENDING)
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  @@index([staffId])
+}
+
+enum RequestStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+}

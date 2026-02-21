@@ -1,0 +1,15 @@
+# *
+User-agent: *
+Allow: /
+Disallow: /api/:path*
+Disallow: /server-sitemap.xml
+Disallow: /user
+Disallow: /sign-in
+Disallow: /sign-up
+
+# Host
+Host: https://clinic-admin-panel.id
+
+# Sitemaps
+Sitemap: https://clinic-admin-panel.id/sitemap.xml
+Sitemap: undefined/server-sitemap.xml

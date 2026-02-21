@@ -1,8 +1,97 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Clinic Admin Panel
+
+This is a Next.js-based admin panel designed for managing a clinic's website content and internal operations. It allows staff to manage news, promotions, user accounts, doctor schedules, and patient queues.
+
+## Features
+
+*   **News & Promotions Management**: Staff can create, edit, and delete news and promotions.
+    *   **Publishing**: Only staff with the **Doctor** role can publish news. All staff can create drafts.
+    *   Promotions and news are intended for display on the public-facing clinic website.
+*   **User Management**:
+    *   **Admin Only**: Create, modify, and delete users who have access to the admin panel.
+    *   **Role-Based Access Control (RBAC)**: Permissions are enforced based on roles (Admin, Doctor, Staff).
+*   **Doctor Schedule Management**:
+    *   **Admin Only**: Create, modify, and delete practice schedules for doctors.
+*   **Profile Management**:
+    *   Users can update their own bio and request a title (role) change.
+    *   **Approval Workflow**: Title change requests require approval from an **Admin**. Notifications are sent to admins via Pusher when a request is made.
+*   **Queue Management**:
+    *   Manage registered patient queues.
+    *   Add (create), change status, or delete queue numbers.
+    *   Real-time notifications for calling patient queues using Pusher.
+
+## Tech Stack
+
+*   **Framework**: Next.js
+*   **Authentication**: Clerk
+*   **Database**: Neon DB (PostgreSQL)
+*   **ORM**: Prisma
+*   **Storage**: Google Cloud Storage (for news and promotion images)
+*   **Real-time Notifications**: Pusher
+
+## Database Schema
+
+![Entity Relationship Diagram](./ERD.svg)
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+*   Node.js (LTS version recommended)
+*   npm, yarn, pnpm, or bun
+
+### Installation
+
+1.  **Clone the repository:**
+
+    ```bash
+    git clone <repository-url>
+    cd clinic_admin_panel
+    ```
+
+2.  **Install dependencies:**
+
+    ```bash
+    npm install
+    # or
+    yarn install
+    # or
+    pnpm install
+    # or
+    bun install
+    ```
+
+3.  **Set up Environment Variables:**
+
+    Create a `.env` file in the root directory and add the necessary variables for Clerk, Prisma, Google Cloud Storage, and Pusher.
+
+    ```env
+    # Database (Neon DB)
+    DATABASE_URL="postgresql://..."
+
+    # Clerk Authentication
+    NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=
+    CLERK_SECRET_KEY=
+
+    # Google Cloud Storage
+    GCS_BUCKET_NAME=
+    GOOGLE_APPLICATION_CREDENTIALS= # Path to json or content
+
+    # Pusher
+    PUSHER_APP_ID=
+    PUSHER_KEY=
+    PUSHER_SECRET=
+    PUSHER_CLUSTER=
+    ```
+
+4.  **Run Database Migrations:**
+
+    ```bash
+    npx prisma generate
+    npx prisma db push
+    ```
+
+5.  **Run the Development Server:**
 
 ```bash
 npm run dev
