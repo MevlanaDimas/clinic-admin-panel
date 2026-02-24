@@ -8,7 +8,7 @@ import { PageLoading } from "@/components/ui/page-loading";
 import { ThemeProvider } from "@/components/ui/theme-provider";
 import { cookies } from "next/headers";
 import NotificationWatcher from "@/components/RoleRequestWatcher";
-import { auth, currentUser } from "@clerk/nextjs/server";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -75,6 +75,7 @@ export default async function RootLayout({
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
           suppressHydrationWarning
           >
+            <SpeedInsights />
             <NotificationWatcher />
             <Suspense fallback={<PageLoading />}>
               <ThemeProvider
