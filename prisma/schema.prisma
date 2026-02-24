@@ -9,11 +9,10 @@ generator client {
   output   = "../src/app/generated/prisma"
 }
 
-generator erd {
-  provider = "prisma-erd-generator"
-  output   = "../ERD.svg"
-  disabled = env("SKIP_ERD")
-}
+// generator erd {
+//   provider = "prisma-erd-generator"
+//   output   = "../ERD.svg"
+// }
 
 datasource db {
   provider = "postgresql"
