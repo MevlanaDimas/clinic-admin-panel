@@ -7,6 +7,7 @@ This is a Next.js-based admin panel designed for managing a clinic's website con
 *   **News & Promotions Management**: Staff can create, edit, and delete news and promotions.
     *   **Publishing**: Only staff with the **Doctor** role can publish news. All staff can create drafts.
     *   Promotions and news are intended for display on the public-facing clinic website.
+    *   **AI Integration**: Uses **Gemini AI** to create news content and summaries, as well as promotional descriptions.
 *   **User Management**:
     *   **Admin Only**: Create, modify, and delete users who have access to the admin panel.
     *   **Role-Based Access Control (RBAC)**: Permissions are enforced based on roles (Admin, Doctor, Staff).
@@ -28,6 +29,7 @@ This is a Next.js-based admin panel designed for managing a clinic's website con
 *   **ORM**: Prisma
 *   **Storage**: Google Cloud Storage (for news and promotion images)
 *   **Real-time Notifications**: Pusher
+*   **AI**: Google Gemini AI
 
 ## Database Schema
 
@@ -63,7 +65,7 @@ This is a Next.js-based admin panel designed for managing a clinic's website con
 
 3.  **Set up Environment Variables:**
 
-    Create a `.env` file in the root directory and add the necessary variables for Clerk, Prisma, Google Cloud Storage, and Pusher.
+    Create a `.env` file in the root directory and add the necessary variables for Clerk, Prisma, Google Cloud Storage, Pusher, and Gemini AI.
 
     ```env
     # Database (Neon DB)
@@ -82,6 +84,9 @@ This is a Next.js-based admin panel designed for managing a clinic's website con
     PUSHER_KEY=
     PUSHER_SECRET=
     PUSHER_CLUSTER=
+
+    # Gemini AI
+    GEMINI_API_KEY=
     ```
 
 4.  **Run Database Migrations:**

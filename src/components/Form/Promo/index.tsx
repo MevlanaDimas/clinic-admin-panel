@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useState } from "react"
 import { toast } from "sonner";
-import { ArrowLeft, LoaderPinwheel, Plus, Sparkles, Trash2 } from "lucide-react";
+import { ArrowLeft, Info, LoaderPinwheel, Plus, Sparkles, Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { AlertModal } from "@/components/Modals"; 
 import { Promo, PromoImages } from "@/app/generated/prisma/client";
@@ -35,6 +35,7 @@ export const PromoForm: React.FC<PromoFormProps> = ({ initialData }) => {
     const [loading, setLoading] = useState(false);
     const [aiPrompt, setAiPrompt] = useState("");
     const [isAiEnabled, setIsAiEnabled] = useState(false);
+    const [showFormattingRules, setShowFormattingRules] = useState(false);
 
     const title = initialData ? "Edit Promo" : "Create Promo";
     const description = initialData ? "Update promo information" : "Add a new promo";
@@ -346,7 +347,21 @@ export const PromoForm: React.FC<PromoFormProps> = ({ initialData }) => {
                                 name="description"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Description</FormLabel>
+                                        <div className="flex items-center gap-2">
+                                            <FormLabel>Description</FormLabel>
+                                            <Info
+                                                className="h-4 w-4 cursor-pointer text-muted-foreground hover:text-primary"
+                                                onClick={() => setShowFormattingRules(!showFormattingRules)}
+                                            />
+                                        </div>
+                                        {showFormattingRules && (
+                                            <div className="rounded-md bg-muted p-3 text-sm text-muted-foreground">
+                                                <p className="font-medium mb-1">Formatting Rules:</p>
+                                                <ul className="list-disc list-inside space-y-1">
+                                                    <li><strong>Bold:</strong> Wrap text with ** (e.g., **Bold Text**)</li>
+                                                </ul>
+                                            </div>
+                                        )}
                                         <FormControl>
                                             <Textarea maxLength={130} disabled={loading} placeholder="Generated promo description will appear here." className="min-h-25" {...field} required />
                                         </FormControl>

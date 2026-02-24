@@ -9,7 +9,7 @@ import { toast } from "sonner";
 import { motion } from "framer-motion";
 import api from "@/lib/api";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, LoaderPinwheel, Minus, Plus, Sparkles, Trash2 } from "lucide-react";
+import { ArrowLeft, Info, LoaderPinwheel, Minus, Plus, Sparkles, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
@@ -39,6 +39,7 @@ export const NewsForm: React.FC<NewsFormProps> = ({ initialData, staff }) => {
     const [aiPrompt, setAiPrompt] = useState("");
     const [isAiEnabled, setIsAiEnabled] = useState(false);
     const [tagsInput, setTagsInput] = useState<string>("");
+    const [showFormattingRules, setShowFormattingRules] = useState(false);
 
     const title = initialData ? "Edit News" : "Create News";
     const description = initialData ? "Update news information" : "Add a new news";
@@ -386,12 +387,29 @@ export const NewsForm: React.FC<NewsFormProps> = ({ initialData, staff }) => {
                             </div>
 
                             <div>
-                                <FormField
+                            <FormField
                                 control={form.control}
                                 name="content"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Content</FormLabel>
+                                        <div className="flex items-center gap-2">
+                                            <FormLabel>Content</FormLabel>
+                                            <Info
+                                                className="h-4 w-4 cursor-pointer text-muted-foreground hover:text-primary"
+                                                onClick={() => setShowFormattingRules(!showFormattingRules)}
+                                            />
+                                        </div>
+                                        {showFormattingRules && (
+                                            <div className="rounded-md bg-muted p-3 text-sm text-muted-foreground">
+                                                <p className="font-medium mb-1">Formatting Rules:</p>
+                                                <ul className="list-disc list-inside space-y-1">
+                                                    <li><strong>Title (H2):</strong> Wrap text with ** (e.g., **Title**)</li>
+                                                    <li><strong>List:</strong> Start with * and space (e.g., * Item)</li>
+                                                    <li><strong>Subtitle (H3):</strong> Short text (&lt;100 chars) without ending period</li>
+                                                    <li><strong>Link (to related news title in this app database):</strong> Start with ## (e.g. ## Another News Title)</li>
+                                                </ul>
+                                            </div>
+                                        )}
                                         <FormControl>
                                             <Textarea
                                                 minLength={50}
@@ -400,7 +418,7 @@ export const NewsForm: React.FC<NewsFormProps> = ({ initialData, staff }) => {
                                                 className="min-h-25"
                                                 {...field}
                                                 required
-                                            />
+                                                />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
