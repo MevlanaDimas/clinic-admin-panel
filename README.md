@@ -35,6 +35,15 @@ This is a Next.js-based admin panel designed for managing a clinic's website con
 
 ![Entity Relationship Diagram](./ERD.svg)
 
+## Cron Jobs
+
+This project uses Vercel Cron Jobs to handle scheduled tasks.
+
+*   **Reset Queue Table**:
+    *   **Endpoint**: `/api/cron/reset-table`
+    *   **Schedule**: `0 17 * * *` (Daily at 17:00 UTC)
+    *   **Description**: Resets the `QueueTicket` table, clearing all patient queues for the next day.
+
 ## Getting Started
 
 ### Prerequisites
@@ -87,6 +96,9 @@ This is a Next.js-based admin panel designed for managing a clinic's website con
 
     # Gemini AI
     GEMINI_API_KEY=
+
+    # Cron Job
+    CRON_SECRET=
     ```
 
 4.  **Run Database Migrations:**

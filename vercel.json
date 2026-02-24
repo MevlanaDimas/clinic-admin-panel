@@ -1,0 +1,8 @@
+{
+    "crons": [
+        {
+            "path": "/api/cron/reset-table",
+            "schedule": "0 17 * * *"
+        }
+    ]
+}
