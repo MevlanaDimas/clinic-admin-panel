@@ -4,7 +4,6 @@ import { DoctorPracticeSchedule, Staff } from "@/app/generated/prisma/client"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table";
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { UserForm } from "../Form/User";
 import { Separator } from "../ui/separator";
 import Search from "../SearchBar";
 import { PageSizeSelect } from "../PageSizeSelect";
@@ -74,7 +73,6 @@ const DoctorTable = ({
                 >
                     <div className="flex justify-between items-center px-2.5">
                         <h2 className="text-3xl font-bold tracking-tight">Doctor List</h2>
-                        <UserForm />
                     </div>
                     <div className="flex items-center justify-between">
                         <div className="w-70 pl-2">
